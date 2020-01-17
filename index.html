@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Lyricful</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div class="container">
+        <h1>Song Lyrics</h1>
+
+        <form class="js-search-form">
+            <fieldset name="lyric-search">
+                <legend>Search for song lyrics</legend>
+                <label for="query-artist">Artist:</label>
+                <input type="text" class="js-query-artist" placeholder="Queen" id="query-artist">
+                <label for="query-title">Song title:</label>
+                <input type="text" class="js-query-title" placeholder="Under Pressure" id="query-title">
+                <button type="submit">Search</button>
+            </fieldset>
+        </form>
+
+        <section class="hidden" id="results">
+
+        </section>
+
+        <section class="hidden" id="js-error-message">
+
+        </section>
+    </div>
+    <script src="practice-script.js"></script>
+</body>
+
+</html>
