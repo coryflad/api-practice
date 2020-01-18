@@ -1,11 +1,13 @@
-'use strict';
+'use strict'
 
 function getLyrics(artist, title) {
-
+  // dynamically generate the URL
   const url = `https://api.lyrics.ovh/v1/${artist}/${title}`;
 
   console.log(`Finding lyrics for ${title} by ${artist}`);
- 
+
+  // get data for the API, if error is returned, display error
+
   fetch(url)
     .then(response => {
       if (response.ok) {
@@ -16,24 +18,16 @@ function getLyrics(artist, title) {
     .then(responseJson => displayResults(responseJson))
     .catch(err => {
       $('#js-error-message').text(`Something went wrong: ${err.message}`);
+      $('#results').empty();
       $('#js-error-message').removeClass('hidden');
     });
+
+
 }
 
 function displayResults(responseJson) {
 
   console.log(responseJson);
-
-  $('#results').html('');
-  console.log('emptied');
-
-  $('#results').append(
-    `<p>Here are the lyrics requested:</p>
-    ${responseJson.lyrics}`);
-
-  $('#results').removeClass('hidden');
-  console.log('displayed');
-
 }
 
 function watchForm() {
@@ -41,13 +35,15 @@ function watchForm() {
     event.preventDefault();
     const artist = $('.js-query-artist').val();
     if (artist == '') {
-      alert('Please select an artist');
+      alert('please select an artist');
     }
     const title = $('.js-query-title').val();
     if (title == '') {
-      alert('Please enter a song title');
+      alert('please enter song title');
     }
     getLyrics(artist, title);
   });
 }
+
+
 $(watchForm);
