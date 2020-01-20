@@ -1,49 +1,65 @@
-'use strict'
+'use strict';
 
-function getLyrics(artist, title) {
-  // dynamically generate the URL
-  const url = `https://api.lyrics.ovh/v1/${artist}/${title}`;
+//  step 1, watch for user input
 
-  console.log(`Finding lyrics for ${title} by ${artist}`);
+function watchSubmit() {
 
-  // get data for the API, if error is returned, display error
+    $('.js-search-form').submit(event => {
 
-  fetch(url)
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-      throw new Error(response.statusText);
-    })
-    .then(responseJson => displayResults(responseJson))
-    .catch(err => {
-      $('#js-error-message').text(`Something went wrong: ${err.message}`);
-      $('#results').empty();
-      $('#js-error-message').removeClass('hidden');
+        event.preventDefault();
+
+        let artist = $('.js-query-artist').val();
+        if (artist == '') {
+            alert('please enter artist');
+        }
+
+        let title = $('.js-query-title').val();
+        if (title == '') {
+            alert('please enter song title');
+        } else {
+            getDataFromApi(artist, title);
+        }
     });
 
-
 }
 
-function displayResults(responseJson) {
+// step 2, define the function to make the api call
 
-  console.log(responseJson);
+function getDataFromApi(artist, title) {
+
+    console.log('getting lyrics');
+
+    const url = `https://api.lyrics.ovh/v1/${artist}/${title}`;
+
+    fetch(url)
+    .then (response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error (response.statusText);
+    })
+    .then (responseJson => displaySearchData(responseJson))
+    .catch (err => {
+        console.log(err);
+    });
 }
 
-function watchForm() {
-  $('form').submit(event => {
-    event.preventDefault();
-    const artist = $('.js-query-artist').val();
-    if (artist == '') {
-      alert('please select an artist');
+
+// step 3, display the results
+
+function displaySearchData(responseJson) {
+
+    console.log(responseJson);
+
+    if (responseJson.lyrics == '') {
+        alert ('no lyrics found');
+    } else {
+        let HtmlOutput = '<pre><code>' + responseJson.lyrics + '</pre></code>'
+
+        $('.js-search-results').html(HtmlOutput);
     }
-    const title = $('.js-query-title').val();
-    if (title == '') {
-      alert('please enter song title');
-    }
-    getLyrics(artist, title);
-  });
+
 }
 
 
-$(watchForm);
+$(watchSubmit);
