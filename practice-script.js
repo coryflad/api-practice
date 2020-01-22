@@ -1,65 +1,71 @@
 'use strict';
 
-//  step 1, watch for user input
 
-function watchSubmit() {
+
+function watchUserInput() {
 
     $('.js-search-form').submit(event => {
 
         event.preventDefault();
 
         let artist = $('.js-query-artist').val();
+        // ensure this test is always present
+        console.log(artist);
         if (artist == '') {
             alert('please enter artist');
         }
-
+        
         let title = $('.js-query-title').val();
+        // ensure this test is always present
+        console.log(artist, title);
         if (title == '') {
-            alert('please enter song title');
-        } else {
-            getDataFromApi(artist, title);
+            alert('please etner song title');
+        } 
+        else {
+            useApi(artist, title);
         }
     });
 
+
 }
 
-// step 2, define the function to make the api call
+function useApi(artist, title) {
 
-function getDataFromApi(artist, title) {
-
-    console.log('getting lyrics');
+    console.log('finding lyrics');
 
     const url = `https://api.lyrics.ovh/v1/${artist}/${title}`;
 
+    // ensure this test is always present
+    console.log(url);
+
     fetch(url)
-    .then (response => {
-        if (response.ok) {
-            return response.json();
-        }
-        throw new Error (response.statusText);
-    })
-    .then (responseJson => displaySearchData(responseJson))
-    .catch (err => {
-        console.log(err);
-    });
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error(response.statusText);
+        })
+        .then(responseJson => displayApiData(responseJson))
+        .catch(err => {
+            console.log(err)
+        });
 }
 
-
-// step 3, display the results
-
-function displaySearchData(responseJson) {
+function displayApiData(responseJson) {
 
     console.log(responseJson);
 
     if (responseJson.lyrics == '') {
-        alert ('no lyrics found');
+        alert('no lyrics found')
     } else {
-        let HtmlOutput = '<pre><code>' + responseJson.lyrics + '</pre></code>'
+        let HtmlOutput = '<pre><code>' + responseJson.lyrics + '</code></pre>'
 
         $('.js-search-results').html(HtmlOutput);
     }
 
+
 }
 
 
-$(watchSubmit);
+
+$(watchUserInput);
