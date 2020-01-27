@@ -1,71 +1,62 @@
 'use strict';
 
 
+function useApi(artist, title) {
 
-function watchUserInput() {
+    const url = `https://api.lyrics.ovh/v1/${artist}/${title}`;
+
+    console.log(url);
+
+    fetch(url)
+    .then(response => {
+        if(response.ok) {
+            return response.json();
+        }
+        throw new Error(response.statusText);
+    })
+    .then(responseJson => displayResults(responseJson))
+    .catch(err => {
+        console.log(err);
+    });
+}
+
+function displayResults(responseJson) {
+
+    console.log(responseJson);
+
+    let HtmlOutput = `<pre><code>${responseJson.lyrics}</code></pre>`;
+
+    $('.js-search-results').html(HtmlOutput);
+    
+
+
+}
+
+
+function watchSubmit() {
 
     $('.js-search-form').submit(event => {
 
         event.preventDefault();
 
         let artist = $('.js-query-artist').val();
-        // ensure this test is always present
         console.log(artist);
-        if (artist == '') {
-            alert('please enter artist');
+
+        if(artist == '') {
+            alert('please enter artist name');
         }
-        
+
         let title = $('.js-query-title').val();
-        // ensure this test is always present
-        console.log(artist, title);
-        if (title == '') {
-            alert('please etner song title');
-        } 
-        else {
-            useApi(artist, title);
+        console.log(artist,title);
+
+        if(title == '') {
+            alert('please enter song title');
+        } else {
+            useApi(artist,title);
         }
     });
 
-
 }
 
-function useApi(artist, title) {
+$(watchSubmit);
 
-    console.log('finding lyrics');
-
-    const url = `https://api.lyrics.ovh/v1/${artist}/${title}`;
-
-    // ensure this test is always present
-    console.log(url);
-
-    fetch(url)
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            }
-            throw new Error(response.statusText);
-        })
-        .then(responseJson => displayApiData(responseJson))
-        .catch(err => {
-            console.log(err)
-        });
-}
-
-function displayApiData(responseJson) {
-
-    console.log(responseJson);
-
-    if (responseJson.lyrics == '') {
-        alert('no lyrics found')
-    } else {
-        let HtmlOutput = '<pre><code>' + responseJson.lyrics + '</code></pre>'
-
-        $('.js-search-results').html(HtmlOutput);
-    }
-
-
-}
-
-
-
-$(watchUserInput);
